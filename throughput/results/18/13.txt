@@ -1,0 +1,74 @@
+BEGIN;
+BEGIN
+select
+	c_count,
+	count(*) as custdist
+from
+	(
+		select
+			c_custkey,
+			count(o_orderkey)
+		from
+			customer left outer join orders on
+				c_custkey = o_custkey
+				and o_comment not like '%pending%packages%'
+		group by
+			c_custkey
+	) as c_orders (c_custkey, c_count)
+group by
+	c_count
+order by
+	custdist desc,
+	c_count desc;
+ c_count | custdist 
+---------+----------
+       0 |   500018
+      10 |    66291
+       9 |    65270
+      11 |    62167
+       8 |    58308
+      12 |    55640
+      13 |    49929
+       7 |    46668
+      19 |    46528
+      18 |    46297
+      14 |    45342
+      20 |    45331
+      17 |    44871
+      16 |    43924
+      15 |    43782
+      21 |    42444
+      22 |    38115
+       6 |    32878
+      23 |    32432
+      24 |    26775
+      25 |    21093
+       5 |    19694
+      26 |    15899
+      27 |    11701
+       4 |     9948
+      28 |     8170
+      29 |     5584
+       3 |     3981
+      30 |     3658
+      31 |     2349
+      32 |     1517
+       2 |     1216
+      33 |      866
+      34 |      508
+      35 |      263
+       1 |      230
+      36 |      156
+      37 |       74
+      38 |       38
+      39 |       20
+      40 |       11
+      41 |        5
+      42 |        4
+      43 |        3
+      45 |        1
+      44 |        1
+(46 rows)
+
+COMMIT;
+COMMIT
